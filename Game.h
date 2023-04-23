@@ -1,6 +1,7 @@
 #ifndef __Game__
 #define __Game__
 
+#include <vector>
 #include <SDL2/SDL.h>
 #include "TextureManager.h"
 #include "GameObject.h"
@@ -30,8 +31,10 @@ private:
 	bool m_bRunning;
 	int m_currentFrame;
 
-	GameObject m_go;
-	Player m_player;
+	GameObject* m_go;
+	GameObject* m_player;
+	GameObject* m_enemy;
+	std::vector<GameObject *> m_gameObjects;
 };
 
 #endif // __Game__
