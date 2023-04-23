@@ -1,30 +1,24 @@
+#include <string>
 #include <iostream>
-#include "GameOverState.h"
-#include "Game.h"
+
 #include "MainMenuState.h"
 #include "PlayState.h"
-#include "AnimatedGraphic.h"
-#include "InputHandler.h"
-#include "PauseState.h"
-#include "LoaderParams.h"
 #include "MenuButton.h"
+#include "TextureManager.h"
+#include "Game.h"
 #include "StateParser.h"
 
-const std::string GameOverState::s_gameOverID = "GAMEOVER";
+const std::string MainMenuState::s_menuID = "MENU";
 
-void GameOverState::update()
+void MainMenuState::update()
 {
-    if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_ESCAPE))
-    {
-        TheGame::Instance()->getStateMachine()->pushState(new PauseState());
-    }
     for (int i = 0; i < m_gameObjects.size(); i++)
     {
         m_gameObjects[i]->update();
     }
 }
 
-void GameOverState::render()
+void MainMenuState::render()
 {
     for (int i = 0; i < m_gameObjects.size(); i++)
     {
@@ -32,23 +26,24 @@ void GameOverState::render()
     }
 }
 
-bool GameOverState::onEnter()
+bool MainMenuState::onEnter()
 {
     // parse the state
     StateParser stateParser;
-    stateParser.parseState("test.xml", s_gameOverID, &m_gameObjects, &m_textureIDList);
-    m_callbacks.push_back(0);
-    m_callbacks.push_back(s_gameOverToMain);
-    m_callbacks.push_back(s_restartPlay);
+    stateParser.parseState("test.xml", s_menuID, &m_gameObjects, &m_textureIDList);
+
+    m_callbacks.push_back(0); // pushback 0 callbackID start from 1
+    m_callbacks.push_back(s_menuToPlay);
+    m_callbacks.push_back(s_exitFromMenu);
 
     // set the callbacks for menu items
     setCallbacks(m_callbacks);
 
-    std::cout << "entering GameOverState" << std::endl;
+    std::cout << "entering MainMenuState" << std::endl;
     return true;
 }
 
-bool GameOverState::onExit()
+bool MainMenuState::onExit()
 {
     for (int i = 0; i < m_gameObjects.size(); i++)
     {
@@ -62,22 +57,23 @@ bool GameOverState::onExit()
         TheTextureManager::Instance()->clearFromTextureMap(m_textureIDList[i]);
     }
 
-    std::cout << "exiting GameOverState" << std::endl;
-    ;
+    std::cout << "exiting MainMenuState" << std::endl;
     return true;
 }
 
-void GameOverState::s_gameOverToMain()
+void MainMenuState::s_menuToPlay()
 {
-    TheGame::Instance()->getStateMachine()->changeState(new MainMenuState());
-}
-
-void GameOverState::s_restartPlay()
-{
+    std::cout << "Play button clicked" << std::endl;
     TheGame::Instance()->getStateMachine()->changeState(new PlayState());
 }
 
-void GameOverState::setCallbacks(const std::vector<Callback> &callbacks)
+void MainMenuState::s_exitFromMenu()
+{
+    std::cout << "Exit button clicked" << std::endl;
+    TheGame::Instance()->quit();
+}
+
+void MainMenuState::setCallbacks(const std::vector<Callback> &callbacks)
 {
     // go through the game objects
     for (int i = 0; i < m_gameObjects.size(); i++)

@@ -5,7 +5,10 @@
 #include "TextureManager.h"
 #include "InputHandler.h"
 #include "PlayState.h"
+#include "MenuButton.h"
+#include "AnimatedGraphic.h"
 #include "MenuState.h"
+#include "MainMenuState.h"
 
 Game *Game::s_pInstance = 0;
 
@@ -57,8 +60,13 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 	std::cout << "init success\n";
 	m_bRunning = true; // everything inited successfully, start the main loop
 
+	TheGameObjectFactory::Instance()->registerType("MenuButton", new MenuButtonCreator());
+	TheGameObjectFactory::Instance()->registerType("Enemy", new EnemyCreator());
+	TheGameObjectFactory::Instance()->registerType("Player", new PlayerCreator());
+	TheGameObjectFactory::Instance()->registerType("AnimatedGraphic", new AnimatedGraphicCreator());
+
 	m_pGameStateMachine = new GameStateMachine();
-	m_pGameStateMachine->changeState(new MenuState());
+	m_pGameStateMachine->changeState(new MainMenuState());
 
 	return true;
 }
