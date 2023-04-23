@@ -6,7 +6,7 @@ void GameStateMachine::pushState(GameState *pState)
     m_gameStates.back()->onEnter();
 }
 
-void GameStateMachine::popState()
+void GameStateMachine::popStatePrivate()
 {
     if (!m_gameStates.empty())
     {
@@ -18,7 +18,7 @@ void GameStateMachine::popState()
     }
 }
 
-void GameStateMachine::changeState(GameState *pState)
+void GameStateMachine::changeStatePrivate(GameState *pState)
 {
     if (!m_gameStates.empty())
     {
@@ -31,6 +31,18 @@ void GameStateMachine::changeState(GameState *pState)
         {
             delete m_gameStates.back();
             m_gameStates.pop_back();
+        }
+
+        // We check if the State exists in the StateMachine, if it exists
+        // we eliminate them to free memory and an unneeded State
+        for (auto it = m_gameStates.begin(); it != m_gameStates.end(); ++it)
+        {
+            if (((*it)->getStateID() == pState->getStateID()) && ((*it)->onExit()))
+            {
+                delete (*it);
+                m_gameStates.erase(it);
+                break;
+            }
         }
     }
 
@@ -47,6 +59,17 @@ void GameStateMachine::update()
     {
         m_gameStates.back()->update();
     }
+
+    if (changeStateFlag)
+    {
+        changeStatePrivate(newState);
+        changeStateFlag = false;
+    }
+    else if (popStateFlag)
+    {
+        popStatePrivate();
+        popStateFlag = false;
+    }
 }
 
 void GameStateMachine::render()
@@ -55,4 +78,15 @@ void GameStateMachine::render()
     {
         m_gameStates.back()->render();
     }
+}
+
+void GameStateMachine::popState()
+{
+    popStateFlag = true;
+}
+
+void GameStateMachine::changeState(GameState *pState)
+{
+    changeStateFlag = true;
+    newState = pState;
 }

@@ -19,6 +19,7 @@ public:
 	void handleEvents();
 	void clean();
 	void quit() { m_bRunning = false; }
+	GameStateMachine *getStateMachine() { return m_pGameStateMachine; }
 
 	bool running() { return m_bRunning; }
 	SDL_Renderer *getRenderer() const { return m_pRenderer; }
@@ -45,7 +46,7 @@ private:
 	bool m_bRunning;
 	int m_currentFrame;
 
-	GameStateMachine* m_pGameStateMachine;
+	GameStateMachine *m_pGameStateMachine;
 
 	static Game *s_pInstance;
 };
