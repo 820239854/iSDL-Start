@@ -2,14 +2,14 @@
 #define __Enemy__
 
 #include <string>
+#include "SDLGameObject.h"
 
-#include "GameObject.h"
-
-class Enemy : public GameObject
+class Enemy : public SDLGameObject
 {
 public:
-    void load(int x, int y, int width, int height, std::string textureID);
-    void draw(SDL_Renderer *pRenderer);
+	Enemy(const LoaderParams* pParams);
+
+    void draw();
     void update();
     void clean();
 };
