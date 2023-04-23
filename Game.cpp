@@ -32,7 +32,7 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 			if (m_pRenderer != 0) // renderer init success
 			{
 				std::cout << "renderer creation success\n";
-				SDL_SetRenderDrawColor(m_pRenderer, 255, 0, 0, 255);
+				SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, 255);
 			}
 			else
 			{
@@ -56,11 +56,6 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
 	std::cout << "init success\n";
 	m_bRunning = true; // everything inited successfully, start the main loop
-
-	if (!TheTextureManager::Instance()->load("assets/animate.jpg", "animate", m_pRenderer))
-	{
-		return false;
-	}
 
 	m_pGameStateMachine = new GameStateMachine();
 	m_pGameStateMachine->changeState(new MenuState());
