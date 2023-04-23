@@ -17,13 +17,14 @@ public:
 	void update();
 	void handleEvents();
 	void clean();
+	void quit() { m_bRunning = false; }
 
 	bool running() { return m_bRunning; }
 	SDL_Renderer *getRenderer() const { return m_pRenderer; }
 
-	static Game* Instance()
+	static Game *Instance()
 	{
-		if(s_pInstance == 0)
+		if (s_pInstance == 0)
 		{
 			s_pInstance = new Game();
 			return s_pInstance;
@@ -33,7 +34,7 @@ public:
 
 private:
 	Game(){};
-	
+
 	SDL_Window *m_pWindow;
 	SDL_Renderer *m_pRenderer;
 	SDL_Texture *m_pTexture;

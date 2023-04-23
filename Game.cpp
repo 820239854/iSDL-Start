@@ -1,8 +1,9 @@
 #include <iostream>
 #include <vector>
 #include "Game.h"
-#include "TextureManager.h"
 #include "Enemy.h"
+#include "TextureManager.h"
+#include "InputHandler.h"
 
 Game *Game::s_pInstance = 0;
 
@@ -49,6 +50,8 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 		return false; // SDL init fail
 	}
 
+	TheInputHandler::Instance()->initialiseJoysticks();
+
 	std::cout << "init success\n";
 	m_bRunning = true; // everything inited successfully, start the main loop
 
@@ -80,24 +83,13 @@ void Game::clean()
 	std::cout << "cleaning game\n";
 	SDL_DestroyWindow(m_pWindow);
 	SDL_DestroyRenderer(m_pRenderer);
+	TheInputHandler::Instance()->clean();
 	SDL_Quit();
 }
 
 void Game::handleEvents()
 {
-	SDL_Event event;
-	if (SDL_PollEvent(&event))
-	{
-		switch (event.type)
-		{
-		case SDL_QUIT:
-			m_bRunning = false;
-			break;
-
-		default:
-			break;
-		}
-	}
+	TheInputHandler::Instance()->update();
 }
 
 void Game::update()
