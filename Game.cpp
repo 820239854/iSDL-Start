@@ -1,4 +1,5 @@
 #include <iostream>
+#include <SDL2/SDL_image.h>
 #include "Game.h"
 
 bool Game::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
@@ -24,7 +25,7 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 			if (m_pRenderer != 0) // renderer init success
 			{
 				std::cout << "renderer creation success\n";
-				SDL_SetRenderDrawColor(m_pRenderer, 255, 255, 255, 255);
+				SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, 255);
 			}
 			else
 			{
@@ -47,7 +48,7 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 	std::cout << "init success\n";
 	m_bRunning = true; // everything inited successfully, start the main loop
 
-	SDL_Surface *pTempSurface = SDL_LoadBMP("assets/animate.bmp");
+	SDL_Surface *pTempSurface = IMG_Load("assets/animate.jpg");
 	m_pTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTempSurface);
 	SDL_FreeSurface(pTempSurface);
 
@@ -63,8 +64,7 @@ void Game::render()
 {
 	SDL_RenderClear(m_pRenderer); // clear the renderer to the draw color
 	SDL_RenderCopy(m_pRenderer, m_pTexture, &m_sourceRectangle, &m_destinationRectangle);
-	// SDL_RenderCopyEx(m_pRenderer, m_pTexture, &m_sourceRectangle, &m_destinationRectangle, 0, 0, SDL_FLIP_HORIZONTAL); // pass in the horizontal flip
-	SDL_RenderPresent(m_pRenderer);																					   // draw to the screen
+	SDL_RenderPresent(m_pRenderer); // draw to the screen
 }
 
 void Game::clean()
