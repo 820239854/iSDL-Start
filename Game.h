@@ -4,6 +4,7 @@
 #include <vector>
 #include <SDL2/SDL.h>
 #include "TextureManager.h"
+#include "GameStateMachine.h"
 #include "GameObject.h"
 #include "Player.h"
 
@@ -44,7 +45,7 @@ private:
 	bool m_bRunning;
 	int m_currentFrame;
 
-	std::vector<GameObject *> m_gameObjects;
+	GameStateMachine* m_pGameStateMachine;
 
 	static Game *s_pInstance;
 };

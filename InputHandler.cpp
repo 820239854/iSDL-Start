@@ -171,7 +171,7 @@ void InputHandler::onKeyUp()
 
 bool InputHandler::isKeyDown(SDL_Scancode key)
 {
-    if (m_keystates != 0)
+    if (m_keystates != nullptr)
     {
         if (m_keystates[key] == 1)
         {

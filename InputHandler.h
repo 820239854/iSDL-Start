@@ -58,7 +58,7 @@ private:
 	std::vector<std::vector<bool>> m_buttonStates;
 	std::vector<bool> m_mouseButtonStates;
 	Vector2D* m_mousePosition;
-	const Uint8* m_keystates;
+	const Uint8* m_keystates = nullptr;
 	int xvalue(int joy, int stick);
 	int yvalue(int joy, int stick);
 	

@@ -4,7 +4,6 @@
 #include <string>
 
 #include "GameObject.h"
-#include <SDL2/SDL.h>
 #include "LoaderParams.h"
 #include "Vector2D.h"
 
