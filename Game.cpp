@@ -1,5 +1,4 @@
 #include <iostream>
-#include <SDL2/SDL_image.h>
 #include "Game.h"
 
 bool Game::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
@@ -47,15 +46,7 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
 	std::cout << "init success\n";
 	m_bRunning = true; // everything inited successfully, start the main loop
-
-	SDL_Surface *pTempSurface = IMG_Load("assets/animate.jpg");
-	m_pTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTempSurface);
-	SDL_FreeSurface(pTempSurface);
-
-	m_destinationRectangle.x = m_sourceRectangle.x = 0;
-	m_destinationRectangle.y = m_sourceRectangle.y = 0;
-	m_destinationRectangle.w = m_sourceRectangle.w = 128;
-	m_destinationRectangle.h = m_sourceRectangle.h = 82;
+	m_textureManager.load("assets/animate.jpg", "animate", m_pRenderer);
 
 	return true;
 }
@@ -63,7 +54,10 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 void Game::render()
 {
 	SDL_RenderClear(m_pRenderer); // clear the renderer to the draw color
-	SDL_RenderCopy(m_pRenderer, m_pTexture, &m_sourceRectangle, &m_destinationRectangle);
+
+	m_textureManager.draw("animate", 0, 0, 128, 82, m_pRenderer);
+	m_textureManager.drawFrame("animate", 100, 100, 128, 82, 1, m_currentFrame, m_pRenderer);
+	
 	SDL_RenderPresent(m_pRenderer); // draw to the screen
 }
 
@@ -94,5 +88,5 @@ void Game::handleEvents()
 
 void Game::update()
 {
-	m_sourceRectangle.x = 128 * int(((SDL_GetTicks() / 100) % 6));
+	m_currentFrame = int(((SDL_GetTicks() / 100) % 6));
 }
